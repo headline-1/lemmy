@@ -1,0 +1,18 @@
+{
+  "name": "lemmy",
+  "version": "0.0.1",
+  "description": "Integrate Lemmy, and he will add a comment to your PR, answering a vital request \"Lemmy know what's going on on my CI server\"",
+  "main": "src/index.js",
+  "repository": "git@github.com:krzysztof-miemiec/lemmy.git",
+  "author": "Krzysztof Miemiec <krzysztof.miemiec@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "lint": "eslint './src/**.*.js'"
+  },
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0"
+  }
+}
