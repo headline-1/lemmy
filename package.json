@@ -8,11 +8,16 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "lint": "eslint './src/**.*.js'"
+    "lint": "tslint './src/**/*.{js,ts}'",
+    "build": "tsc"
   },
   "devDependencies": {
+    "@types/node": "^9.4.0",
     "eslint": "^4.16.0",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0"
+    "eslint-plugin-import": "^2.8.0",
+    "tslint": "^5.9.1",
+    "tslint-config-airbnb-base": "^0.1.0",
+    "typescript": "^2.7.1"
   }
 }
