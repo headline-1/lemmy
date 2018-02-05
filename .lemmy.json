@@ -1,11 +1,11 @@
 {
   "actions": [
     "packageVersion",
-    "changelog"
+    "changelog",
     {
       "name": "lint",
-      "file": "reports/lint"
+      "file": "reports/lint.json"
     },
-
+    "stdout"
   ]
 }

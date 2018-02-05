@@ -1,10 +1,13 @@
 export class Message {
-  private body: string;
+  private body: string = '';
 
   add = (message: string): this => {
     this.body += `${message}\n`;
     return this;
   };
+
+  error = (message: string): this =>
+    this.add(`:exclamation: *${message}*`);
 
   section = (name: string): this => {
     this.body += `\n### ${name}\n`;

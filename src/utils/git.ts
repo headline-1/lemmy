@@ -7,8 +7,8 @@ export const git = {
     return branch.stdout.match(/\* (.+)/)[1];
   },
   diff: async (ctx: Context, fileName: string): Promise<string> => {
-    const current = await git.current();
+    // const current = await git.current();
     const base = ctx.config.git.baseBranch || 'master';
-    return (await exec(`git diff ${base}...${current} ${fileName}`)).stdout;
+    return (await exec(`git diff ${base}:./ -U0 ${fileName}`)).stdout;
   },
 };

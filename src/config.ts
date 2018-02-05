@@ -29,5 +29,6 @@ export const getConfig = async (configLocation: string = '.lemmy.json'): Promise
     ...JSON.parse(file),
   };
   config.actions = config.actions.map(action => typeof action === 'string' ? { name: action } : action);
+  console.log(config);
   return config;
 };
