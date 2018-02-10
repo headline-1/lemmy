@@ -1,59 +1,40 @@
-import http from 'http';
-import https from 'https';
-import URL from 'url';
+import request, { CoreOptions, RequestCallback, Response } from 'request';
+import { promisify } from 'util';
 
-type Method = 'POST' | 'GET' | 'DELETE' | 'PUT';
+const HTTP_BAD_REQUEST = 400;
+type RequestType = (url: string, options: CoreOptions, callback?: RequestCallback) => void;
 
-export const request = (
-  method: Method, url: string, data?: string | object, headers?: object
-): Promise<string> => new Promise<string>(((resolve, reject) => {
-  const { host, port, path, protocol } = URL.parse(url);
-  const contentType = typeof data === 'string' ? 'text/plain' : 'application/json';
-  if (data !== 'string') {
-    data = JSON.stringify(data);
+class ErrorResponse extends Error {
+  constructor(public statusCode: number, message: string, public response: Response) {
+    super(message);
   }
-  const options = {
-    host,
-    port,
-    path,
-    method,
-    headers: {
-      ...headers,
-      'Content-Type': contentType,
-      'Content-Length': Buffer.byteLength(data),
-    },
-  };
+}
 
-  let finished = false;
-  let request = http.request;
-  if (protocol === 'https') {
-    request = https.request;
+const handleErrorCodes = (response: Response) => {
+  if (response.statusCode >= HTTP_BAD_REQUEST) {
+    throw new ErrorResponse(response.statusCode, response.statusMessage, response);
   }
-  const req = request(options, (res) => {
-    res.setEncoding('utf8');
-    let response = '';
-    res.on('data', (chunk) => {
-      if (finished) {
-        return;
-      }
-      response += chunk;
-    });
-    res.on('end', () => {
-      if (finished) {
-        return;
-      }
-      finished = true;
-      resolve(response);
-    });
-  });
-  req.on('error', (err) => {
-    if (finished) {
-      return;
-    }
-    finished = true;
-    reject(err);
-  });
+  return response;
+};
 
-  req.write(data);
-  req.end();
-}));
+const addDefaultOptions = (options: CoreOptions): CoreOptions => {
+  options.headers['User-Agent'] = 'Lemmy';
+  return options;
+};
+
+const getRequest = promisify<string, CoreOptions, Response>(request.get as RequestType);
+const postRequest = promisify<string, CoreOptions, Response>(request.post as RequestType);
+const putRequest = promisify<string, CoreOptions, Response>(request.put as RequestType);
+const deleteRequest = promisify<string, CoreOptions, Response>(request.delete as RequestType);
+
+export const get = (url: string, options: CoreOptions): Promise<Response> =>
+  getRequest(url, addDefaultOptions(options)).then(handleErrorCodes);
+
+export const post = (url: string, options: CoreOptions): Promise<Response> =>
+  postRequest(url, addDefaultOptions(options)).then(handleErrorCodes);
+
+export const put = (url: string, options: CoreOptions): Promise<Response> =>
+  putRequest(url, addDefaultOptions(options)).then(handleErrorCodes);
+
+export const del = (url: string, options: CoreOptions): Promise<Response> =>
+  deleteRequest(url, addDefaultOptions(options)).then(handleErrorCodes);

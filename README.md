@@ -36,10 +36,7 @@ Then add `.lemmy.json` configuration file and define some actions inside:
       "file": "reports/test.json"
     },
     "stdout"
-  ],
-  "git": {
-    "baseBranch": "develop"
-  }
+  ]
 }
 ```
 
@@ -68,7 +65,7 @@ Actions are run exactly in order provided in `.lemmy.json`.
 Action | Description | Params
 --- | --- | ---
 `changelog` | Checks if changes were performed in changelog file | `file` - path to changelog file in repository
-`githubComment` | Sends a Markdown-formatted message as a GitHub Pull Request comment | None, PR number and repository name are inferred from CI's env vars, **however `GITHUB_TOKEN` env var has to be provided**. In case of Travis CI, it can be done either in `.travis.yml` (use secure mechanism) or in configuration section.
+`githubComment` | Sends a Markdown-formatted message as a GitHub Pull Request comment | `oneCommentPerCommit` - set to true, if you want Lemmy to comment only once per build (useful for matrix builds)<br>PR number and repository name are inferred from CI's env vars, **however `GITHUB_TOKEN` env var has to be provided**. In case of Travis CI, it can be done either in `.travis.yml` (use secure mechanism) or in configuration section.
 `jest` | Prepares a report from Jest's json output | `file` - path to report file in repository
 `lint` | Prepares a report from json linter output (tested with TSLint) | `file` - path to report file in repository
 `packageVersion` | Makes sure that version of `package.json` file has been changed | `file` - path to `package.json` file in repository

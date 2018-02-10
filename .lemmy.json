@@ -7,8 +7,8 @@
       "file": "reports/lint.json"
     },
     {
-      "name": "jest",
-      "file": "reports/test.json"
+      "name": "githubComment",
+      "oneCommentPerCommit": true
     },
     "stdout"
   ]
