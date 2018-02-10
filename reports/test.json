@@ -1,0 +1,59 @@
+{
+  "numFailedTestSuites": 1,
+  "numFailedTests": 1,
+  "numPassedTestSuites": 0,
+  "numPassedTests": 1,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 0,
+  "numTotalTestSuites": 1,
+  "numTotalTests": 2,
+  "snapshot": {
+    "added": 0,
+    "didUpdate": false,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeys": [],
+    "unmatched": 0,
+    "updated": 0
+  },
+  "startTime": 1518226652237,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [],
+          "failureMessages": [],
+          "fullName": "renders correctly",
+          "location": null,
+          "status": "passed",
+          "title": "renders correctly"
+        },
+        {
+          "ancestorTitles": [],
+          "failureMessages": [
+            "Error: up\n    at Object.<anonymous>.it (/Projects/xsolve/sonnen-charger/src/app.spec.tsx:14:9)\n    at Object.asyncFn (/Projects/xsolve/sonnen-charger/node_modules/jest-jasmine2/build/jasmine_async.js:129:432)\n    at resolve (/Projects/xsolve/sonnen-charger/node_modules/jest-jasmine2/build/queue_runner.js:51:12)\n    at new Promise (<anonymous>)\n    at mapper (/Projects/xsolve/sonnen-charger/node_modules/jest-jasmine2/build/queue_runner.js:40:274)\n    at promise.then (/Projects/xsolve/sonnen-charger/node_modules/jest-jasmine2/build/queue_runner.js:83:39)\n    at <anonymous>\n    at process._tickCallback (internal/process/next_tick.js:188:7)"
+          ],
+          "fullName": "throws up",
+          "location": null,
+          "status": "failed",
+          "title": "throws up"
+        }
+      ],
+      "endTime": 1518226654729,
+      "message": "\u001b[1m\u001b[31m  \u001b[1m● \u001b[1mthrows up\u001b[39m\u001b[22m\n\n    up\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 12 | \u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 13 | \u001b[39mit(\u001b[32m'throws up'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m\u001b[31m\u001b[1m>\u001b[2m\u001b[39m\u001b[90m 14 | \u001b[39m  \u001b[36mthrow\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m'up'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 15 | \u001b[39m})\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 16 | \u001b[39m\u001b[0m\u001b[22m\n\u001b[2m      \u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous>.it (\u001b[2m\u001b[0m\u001b[36msrc/app.spec.tsx\u001b[39m\u001b[0m\u001b[2m:14:9)\u001b[2m\u001b[22m\n",
+      "name": "/Projects/xsolve/sonnen-charger/src/app.spec.tsx",
+      "startTime": 1518226652361,
+      "status": "failed",
+      "summary": ""
+    }
+  ],
+  "wasInterrupted": false
+}

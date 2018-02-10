@@ -1,6 +1,6 @@
 # 0.0.2
 
-* [NEW] `lint`, `changelog`, `githubComment`, `packageVersion` and `stdout` actions.
+* [NEW] `lint`, `changelog`, `githubComment`, `packageVersion`, `jest` and `stdout` actions.
 * [DEV] Basic architecture, allowing to add actions independently
 
 # 0.0.1

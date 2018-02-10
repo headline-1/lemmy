@@ -1,3 +1,9 @@
+export enum TableAlignment {
+  Left,
+  Right,
+  Center,
+}
+
 export class Message {
   private body: string = '';
 
@@ -14,12 +20,31 @@ export class Message {
     return this;
   };
 
-  table = (table: string[][]) => {
-    this.body += '\n' + table.map((row, index) =>
+  table = (table: (string | number | boolean)[][], align?: TableAlignment[]) => {
+    this.body += '\n' + table.filter(row => !!row).map((row, index) =>
       // Join the row elements with pipe
-      row.map(value => value.replace(/\|/g, '\|')).join(' | ') +
+      row.map(value => value.toString()
+        .replace(/\|/g, '\|')
+        .replace(/\n/g, '<br>')
+      ).join(' | ') +
       // Add hyphens below headers
-      ((index === 0) ? '\n' + Array(row.length).fill('---').join(' | ') : '')
+      ((index === 0) ? '\n' + Array(row.length)
+        .fill('---')
+        .map((element, i) => {
+          if (align) {
+            switch (align[i]) {
+              case TableAlignment.Center:
+                return ':---:';
+              case TableAlignment.Right:
+                return '---:';
+              case TableAlignment.Left:
+              default:
+                return ':---';
+            }
+          }
+          return element;
+        })
+        .join(' | ') : '')
     ).join('\n') + '\n\n';
   };
 

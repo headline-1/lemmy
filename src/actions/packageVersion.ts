@@ -16,6 +16,6 @@ export default async (ctx: Context, params: Params) => {
   if (!versionChange) {
     ctx.message.add(`:warning: You probably forgot to update the package version.`);
   } else {
-    ctx.message.add('Package version has been updated properly.');
+    ctx.message.add(':tada: Package version has been updated properly.');
   }
 };

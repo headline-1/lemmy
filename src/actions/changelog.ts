@@ -18,6 +18,6 @@ export default async (ctx: Context, params: Params) => {
   if (!added || (removed && added.length < removed.length)) {
     ctx.message.add(`:pencil: Please include the changes in \`${params.file}\` file`);
   } else {
-    ctx.message.add('Changelog has been updated properly.');
+    ctx.message.add(':tada: Changelog has been updated properly.');
   }
 };

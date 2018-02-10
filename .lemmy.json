@@ -6,6 +6,10 @@
       "name": "lint",
       "file": "reports/lint.json"
     },
+    {
+      "name": "jest",
+      "file": "reports/test.json"
+    },
     "stdout"
   ]
 }
