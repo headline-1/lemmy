@@ -39,6 +39,7 @@ export default async (ctx: Context, params: Params) => {
     ctx.message.add(':tada: No lint warnings were reported!');
     return;
   }
+  ctx.message.error('Linter reported errors.');
   const table = [['Location', 'Line', 'Failure', 'Rule']];
   file.forEach((fail) => {
     table.push([

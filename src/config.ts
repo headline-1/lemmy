@@ -6,7 +6,7 @@ export interface Config {
     repo?: string;
     pull?: string;
     commit?: string;
-  },
+  };
   ci: {
     os?: string;
     buildNumber?: string;
