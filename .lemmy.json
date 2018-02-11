@@ -1,0 +1,15 @@
+{
+  "actions": [
+    "packageVersion",
+    "changelog",
+    {
+      "name": "lint",
+      "file": "reports/lint.json"
+    },
+    {
+      "name": "githubComment",
+      "oneCommentPerCommit": true
+    },
+    "stdout"
+  ]
+}

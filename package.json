@@ -1,18 +1,31 @@
 {
   "name": "lemmy",
-  "version": "0.0.1",
-  "description": "Integrate Lemmy, and he will add a comment to your PR, answering a vital request \"Lemmy know what's going on on my CI server\"",
+  "version": "0.0.2",
+  "description": "Integrate Lemmy, and it will comment your PRs, answering a vital question \"Lemmy know what's going on my CI server\"",
   "main": "src/index.js",
   "repository": "git@github.com:krzysztof-miemiec/lemmy.git",
   "author": "Krzysztof Miemiec <krzysztof.miemiec@gmail.com>",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "lint": "eslint './src/**.*.js'"
+    "lint": "mkdir -p reports && tslint './src/**/*.{js,ts}' --project ./ --format json --out './reports/lint.json' || tslint './src/**/*.{js,ts}' --project ./ --format stylish",
+    "start": "node dist/index.js",
+    "build": "tsc && babel build --out-dir dist"
   },
   "devDependencies": {
+    "@types/node": "^9.4.0",
+    "@types/request": "^2.47.0",
+    "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "eslint": "^4.16.0",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0"
+    "eslint-plugin-import": "^2.8.0",
+    "tslint": "^5.9.1",
+    "tslint-config-airbnb-base": "^0.1.0",
+    "typescript": "^2.7.1"
+  },
+  "dependencies": {
+    "request": "^2.83.0"
   }
 }
