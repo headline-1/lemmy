@@ -8,6 +8,7 @@ export const git = {
   },
   getBranch: async (branch: string): Promise<void> => {
     const current = await git.current();
+    await exec('git fetch');
     await exec(`git checkout ${branch}`);
     await exec(`git checkout ${current}`);
   },
