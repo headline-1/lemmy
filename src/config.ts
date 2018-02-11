@@ -11,6 +11,7 @@ export interface Config {
     os?: string;
     buildNumber?: string;
     jobNumber?: string;
+    buildDir?:string;
   };
   message: {
     github?: string;
@@ -33,6 +34,7 @@ export const getConfig = async (configLocation: string = '.lemmy.json'): Promise
       os: process.env.TRAVIS_OS_NAME,
       buildNumber: process.env.TRAVIS_BUILD_NUMBER,
       jobNumber: process.env.TRAVIS_JOB_NUMBER,
+      buildDir: process.env.TRAVIS_BUILD_DIR || process.cwd(),
     },
     message: {
       github: process.env.GITHUB_TOKEN,

@@ -100,7 +100,7 @@ export default async (ctx: Context, params: Params) => {
             return;
           }
           failedTests.push([
-            `\`${result.name}\``,
+            `\`${result.name.replace(ctx.config.ci.buildDir, '')}\``,
             assertion.location ? `\`${assertion.location.line}:${assertion.location.column}\`` : '-',
             [...assertion.ancestorTitles, assertion.title].join(' > '),
             assertion.failureMessages.map(e => `\`${e.replace(/\n/g, '`<br>`')}\``).join('<br>'),
