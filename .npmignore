@@ -1,0 +1,7 @@
+build/
+node_modules/
+reports/
+src/
+.*
+tsconfig.json
+tslint.json

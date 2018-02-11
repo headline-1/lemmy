@@ -1,8 +1,8 @@
 {
   "name": "lemmy",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Integrate Lemmy, and it will comment your PRs, answering a vital question \"Lemme know what's going on my CI server\"",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "repository": "git@github.com:krzysztof-miemiec/lemmy.git",
   "author": "Krzysztof Miemiec <krzysztof.miemiec@gmail.com>",
   "license": "MIT",
