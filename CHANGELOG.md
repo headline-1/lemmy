@@ -1,3 +1,7 @@
+# 0.0.5
+
+* [FIX] Travis build fix
+
 # 0.0.4
 
 * [FIX] Missing binary link
