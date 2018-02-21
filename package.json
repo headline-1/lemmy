@@ -1,8 +1,8 @@
 {
   "name": "lemmy",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Integrate Lemmy, and it will comment your PRs, answering a vital question \"Lemme know what's going on my CI server\"",
-  "main": "dist/index.js",
+  "main": "run.js",
   "repository": "git@github.com:krzysztof-miemiec/lemmy.git",
   "author": "Krzysztof Miemiec <krzysztof.miemiec@gmail.com>",
   "license": "MIT",
@@ -11,6 +11,9 @@
     "lint": "mkdir -p reports && tslint './src/**/*.{js,ts}' --project ./ --format json --out './reports/lint.json' || tslint './src/**/*.{js,ts}' --project ./ --format stylish",
     "start": "node dist/index.js",
     "build": "tsc && babel build --out-dir dist"
+  },
+  "bin": {
+    "lemmy": "./run.js"
   },
   "devDependencies": {
     "@types/node": "^9.4.0",
