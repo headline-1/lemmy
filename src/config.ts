@@ -11,7 +11,7 @@ export interface Config {
     os?: string;
     buildNumber?: string;
     jobNumber?: string;
-    buildDir?:string;
+    buildDir?: string;
   };
   message: {
     github?: string;
