@@ -10,6 +10,13 @@ const run = async () => {
   const context: Context = { config, message };
   const errors: string[] = [];
 
+  if (config.args.local === undefined && !config.git.pull) {
+    console.log('Skipping Lemmy actions, because PR identifier hasn\'t been found.' +
+      'Add `--local` flag in order to run Lemmy locally.');
+    process.exit(0);
+    return;
+  }
+
   for (const action of config.actions) {
     let module;
     try {

@@ -1,3 +1,8 @@
+# 0.0.6
+
+* [FIX] Missing library dependency fix.
+* [IMP] Added optional `--local` flag. Lemmy won't run in non-PR builds by default.
+
 # 0.0.5
 
 * [FIX] Travis build fix

@@ -1,6 +1,9 @@
 import { readFile } from './utils/promises';
 
 export interface Config {
+  args: {
+    local?: string;
+  };
   git: {
     baseBranch?: string;
     repo?: string;
@@ -23,7 +26,15 @@ const undefinedIfFalse = (value: string): string => value === 'false' ? undefine
 
 export const getConfig = async (configLocation: string = '.lemmy.json'): Promise<Config> => {
   const file = await readFile(configLocation, 'utf-8');
+  const args = {};
+  process.argv
+    .filter(arg => arg.startsWith('--'))
+    .forEach((arg) => {
+      const [key, value] = [...arg.split('='), ''];
+      args[key.replace(/^--/, '')] = value;
+    });
   const config: Config = {
+    args,
     git: {
       baseBranch: process.env.TRAVIS_BRANCH || 'master',
       repo: process.env.TRAVIS_REPO_SLUG,
