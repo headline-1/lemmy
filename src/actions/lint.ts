@@ -43,7 +43,7 @@ export default async (ctx: Context, params: Params) => {
   const table = [['Location', 'Line', 'Failure', 'Rule']];
   file.forEach((fail) => {
     table.push([
-      `\`${fail.name}\``,
+      `\`${fail.name.replace(ctx.config.ci.buildDir, '')}\``,
       `\`${fail.startPosition.line}:${fail.startPosition.character}\``,
       fail.failure,
       fail.ruleName,

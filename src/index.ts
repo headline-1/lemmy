@@ -8,21 +8,30 @@ const run = async () => {
   const message = new Message();
 
   const context: Context = { config, message };
+  const errors: string[] = [];
 
   for (const action of config.actions) {
     let module;
     try {
       module = await require('./actions/' + action.name);
-    } catch (err) {
+    } catch (ignored) {
       throw new Error(`Can not find an action "${action.name}"`);
     }
     if (!module.default) {
       throw new Error(`An action "${action.name}" does not have a valid entry point (export default function).`);
     }
     console.log(`Running action: ${action.name}`);
-    await module.default(context, action);
+    try {
+      await module.default(context, action);
+    } catch (err) {
+      message.error(err.message);
+      errors.push(action.name + ': ' + err.message);
+    }
   }
-
+  if (errors.length) {
+    console.log(errors.join('\n'));
+    process.exit(1);
+  }
 };
 
 run()

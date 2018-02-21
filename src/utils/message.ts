@@ -13,7 +13,7 @@ export class Message {
   };
 
   error = (message: string): this =>
-    this.add(`:no-entry: *${message}*`);
+    this.add(`:exclamation: **${message.trim()}**`);
 
   section = (name: string): this => {
     this.body += `\n### ${name}\n`;

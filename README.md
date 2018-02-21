@@ -1,9 +1,8 @@
 # Lemmy
-Integrate Lemmy, and it will comment your PRs, answering a vital question "Lemmy know what's going on my CI server". It has no dependencies and (hopefully) will stay this way.
+Integrate Lemmy, and it will comment your PRs, answering a vital question "Lemme know what's going on my CI server".
 
-I made it, because
-* there are no free, open-source solutions that allow to simply comment on Pull Requests, providing basic information on how are the things going on CI.
-* it's tiring to open CI log whenever linter complains about missing comma.
+### Motivation
+There were no free, open-source solutions (besides [Danger.js](https://github.com/danger/danger-js), which didn't work well for me) that allow to simply comment on Pull Requests, providing basic information on how are the things going on CI.
 
 ### Features
 

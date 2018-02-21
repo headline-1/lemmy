@@ -1,3 +1,7 @@
+# 0.0.3
+
+* [FIX] False env vars fix
+
 # 0.0.2
 
 * [NEW] `lint`, `changelog`, `githubComment`, `packageVersion`, `jest` and `stdout` actions.
