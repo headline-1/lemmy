@@ -1,6 +1,6 @@
 {
   "name": "lemmy",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Integrate Lemmy, and it will comment your PRs, answering a vital question \"Lemme know what's going on my CI server\"",
   "main": "run.js",
   "repository": "git@github.com:krzysztof-miemiec/lemmy.git",
@@ -19,7 +19,6 @@
     "@types/node": "^9.4.0",
     "@types/request": "^2.47.0",
     "babel-cli": "^6.26.0",
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.16.0",
     "eslint-config-airbnb-base": "^12.1.0",
@@ -29,6 +28,7 @@
     "typescript": "^2.7.1"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "request": "^2.83.0"
   }
 }
