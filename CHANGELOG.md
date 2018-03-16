@@ -1,6 +1,6 @@
 # 0.0.7
 
-* [IMP] Netwrok errors are more verbose.
+* [IMP] Network errors are more verbose.
 
 # 0.0.6
 
