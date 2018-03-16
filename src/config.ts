@@ -1,9 +1,15 @@
-import { readFile } from './utils/promises';
+import * as path from 'path';
+import {readline} from 'readline';
+import { exists, readdir, readFile } from './utils/promises';
+
+type Args = {
+  local?: string;
+  init?: string;
+  force?: string;
+};
 
 export interface Config {
-  args: {
-    local?: string;
-  };
+  args: Args;
   git: {
     baseBranch?: string;
     repo?: string;
@@ -25,14 +31,22 @@ export interface Config {
 const undefinedIfFalse = (value: string): string => value === 'false' ? undefined : value;
 
 export const getConfig = async (configLocation: string = '.lemmy.json'): Promise<Config> => {
-  const file = await readFile(configLocation, 'utf-8');
-  const args = {};
+  const args: Args = {};
   process.argv
     .filter(arg => arg.startsWith('--'))
     .forEach((arg) => {
       const [key, value] = [...arg.split('='), ''];
       args[key.replace(/^--/, '')] = value;
     });
+  if (args.init) {
+    if (await exists(configLocation) && !args.force) {
+      console.log('Configuration already exists.' +
+        'Add --force parameter if you really want to override existing configuration.');
+      process.exit(1);
+    }
+    createConfig(configLocation);
+  }
+  const file = await readFile(configLocation, 'utf-8');
   const config: Config = {
     args,
     git: {
@@ -54,4 +68,20 @@ export const getConfig = async (configLocation: string = '.lemmy.json'): Promise
   };
   config.actions = config.actions.map(action => typeof action === 'string' ? { name: action } : action);
   return config;
+};
+
+const createConfig = async (configLocation: string): Promise<void> => {
+  const config = { actions: [] };
+
+  const actions = (await readdir('./actions'))
+    .filter(file => file.endsWith('.js'))
+    .map(file => require(path.resolve(file)));
+
+  let line = readline()
+  while(readline){
+  }
+
+  actions.forEach((action) => {
+    console.log('Do you want to perform ' + action.name);
+  });
 };

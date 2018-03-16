@@ -8,6 +8,13 @@ interface Params {
   oneCommentPerCommit?: boolean;
 }
 
+export const name = 'githubComment';
+export const description = 'Sends a Markdown-formatted message as a GitHub Pull Request comment';
+export const args = `
+\`oneCommentPerCommit\` - set to true, if you want Lemmy to comment only once per build (useful for matrix builds)
+PR number and repository name are inferred from CI's env vars, **however \`GITHUB_TOKEN\` env var has to be provided**.\
+ In case of Travis CI, it can be done either in \`.travis.yml\` (use secure mechanism) or in configuration section.`;
+
 export default async (ctx: Context, params: Params) => {
   if (!ctx.config.message.github) {
     throw new Error('Github token is missing.' +

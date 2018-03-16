@@ -4,7 +4,17 @@ import { Context } from './context';
 import { Message } from './utils/message';
 
 const run = async () => {
-  const config = await getConfig();
+  let config;
+  try {
+    config = await getConfig();
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      console.log('Could not read configuration file. You can initialize lemmy by running `lemmy --init`.');
+    } else {
+      console.error(error);
+    }
+    return;
+  }
   const message = new Message();
 
   const context: Context = { config, message };
