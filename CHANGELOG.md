@@ -1,3 +1,7 @@
+# 0.0.7
+
+* [IMP] Netwrok errors are more verbose.
+
 # 0.0.6
 
 * [FIX] Missing library dependency fix.
