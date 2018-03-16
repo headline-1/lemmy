@@ -6,8 +6,8 @@ type RequestType = (url: string, options: CoreOptions, callback?: RequestCallbac
 
 class ErrorResponse extends Error {
   constructor(public statusCode: number, message: string, public response: Response) {
-    super(response.request.method.toUpperCase() + ' ' + response.request.uri +
-      ': ' + statusCode + ' ' + message + '\n' + response.body);
+    super(response.request.method.toUpperCase() + ' ' + response.request.uri.href +
+      ': ' + statusCode + ' ' + message + '\n' + JSON.stringify(response.body));
   }
 }
 
