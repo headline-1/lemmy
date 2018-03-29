@@ -1,3 +1,11 @@
+# 0.0.9
+
+* [FIX] Git pull fix.
+
+# 0.0.8
+
+* [FIX] Network errors fix.
+
 # 0.0.7
 
 * [IMP] Network errors are more verbose.
