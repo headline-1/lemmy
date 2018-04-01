@@ -62,7 +62,7 @@ interface TestResults {
 }
 
 export const action: Action<Params> = {
-  name: 'changelog',
+  name: 'jest',
   description: 'Prepares a report from Jest\'s JSON output.',
   args: [
     { name: 'header', type: 'string', description: 'a custom header', default: 'Jest' },

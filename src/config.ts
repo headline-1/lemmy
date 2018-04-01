@@ -1,15 +1,10 @@
 import prompts from 'prompts';
-import { Action } from './action.interface';
+import { Action, ActionArgument } from './action.interface';
 import { getActions } from './actions';
+import { Args } from './args';
 import { exists, readFile, writeFile } from './utils/promises';
 
 const JSON_SPACES = 2;
-
-type Args = {
-  local?: string;
-  init?: string;
-  force?: string;
-};
 
 export interface Config {
   args: Args;
@@ -33,18 +28,13 @@ export interface Config {
 
 const undefinedIfFalse = (value: string): string => value === 'false' ? undefined : value;
 
-export const getConfig = async (configLocation: string = '.lemmy.json'): Promise<Config> => {
-  const args: Args = {};
-  process.argv
-    .filter(arg => arg.startsWith('--'))
-    .forEach((arg) => {
-      const [key, value] = [...arg.split('='), ''];
-      args[key.replace(/^--/, '')] = value;
-    });
+export const getConfig = async (args: Args, configLocation: string = '.lemmy.json'): Promise<Config> => {
+
   if (args.init) {
     if (await exists(configLocation) && !args.force) {
-      console.log('Configuration already exists.' +
-        'Add --force parameter if you really want to override existing configuration.');
+      console.log(
+        'Configuration already exists. Add --force parameter if you really want to override existing configuration.'
+      );
       process.exit(1);
     }
     await createConfig(configLocation);
@@ -78,24 +68,57 @@ const createConfig = async (configLocation: string): Promise<void> => {
 
   const actions = await getActions();
 
-  let response: Action<any> | undefined = undefined;
+  let response: Action<any> | null | undefined = undefined;
   do {
-    response = await prompts([
+    console.log('Actions: ' + (config.actions.map(action => action.name).join(' > ') || '(none)'));
+    response = (await prompts([
       {
         type: 'select',
-        name: 'Action',
+        name: 'action',
         message: 'Pick an action to perform',
         choices: [
-          { title: 'Done', value: undefined },
-          ...actions.map(action => ({ title: action.name, value: action })),
+          {
+            title: '✔ I\'m done',
+            value: null,
+          },
+          ...actions.filter((action) => {
+            return !config.actions.find(addedAction => addedAction.name === action.name);
+          }).map(action => ({ title: action.name, value: action })),
         ],
         initial: 1,
       },
-    ]);
+    ])).action;
+    const toPrompt = (argument: ActionArgument<any>) => {
+      switch (argument.type) {
+        case 'string':
+          return { type: 'text' };
+        case 'boolean':
+          return { type: 'toggle', active: 'true', inactive: 'false' };
+        default:
+          return { type: argument.type };
+      }
+    };
     if (response) {
-      config.actions.push(response.name);
+      const actionResponse = await prompts(response.args.map(arg => ({
+        name: arg.name,
+        initial: arg.default,
+        ...toPrompt(arg),
+        message: `Set an argument value for ${arg.name} (${arg.description})`,
+      })));
+      if (Object.keys(actionResponse).length === 0) {
+        console.log('Action creation canceled.');
+        continue;
+      }
+      config.actions.push({
+        name: response.name,
+        ...actionResponse,
+      });
+    } else if (response === undefined) {
+      console.log('Initialization canceled.');
+      process.exit(1);
     }
   } while (response);
   await writeFile(configLocation, JSON.stringify(config, null, JSON_SPACES), 'utf-8');
   console.log('Configuration has been successfully saved!');
+  process.exit(0);
 };

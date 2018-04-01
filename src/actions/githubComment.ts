@@ -1,3 +1,4 @@
+import packageJson from '../../package.json';
 import { Action } from '../action.interface';
 import { Context } from '../context';
 import { get, post } from '../utils/request';
@@ -10,13 +11,14 @@ interface Params {
 
 export const action: Action<Params> = {
   name: 'githubComment',
-  description: 'Sends a Markdown-formatted message as a GitHub Pull Request comment.',
+  description: 'Sends a Markdown-formatted message as a GitHub Pull Request comment. ' +
+  'PR number and repository name are inferred from CI\'s env vars,' +
+  ' **however `GITHUB_TOKEN` env var has to be provided**.\n' +
+  'In case of Travis CI, it can be done either in `.travis.yml` (use secure mechanism) or in configuration section.',
   args: [
     {
       name: 'oneCommentPerCommit',
-      description: `set to true, if you want Lemmy to comment only once per build (useful for matrix builds)
-PR number and repository name are inferred from CI's env vars, **however \`GITHUB_TOKEN\` env var has to be provided**.
- In case of Travis CI, it can be done either in \`.travis.yml\` (use secure mechanism) or in configuration section.`,
+      description: 'set to true, if you want Lemmy to comment only once per build (useful for matrix builds)',
       type: 'boolean',
     },
   ],
@@ -40,8 +42,8 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
       ['Summary', 'Value'],
       [':octocat: Commit', commit],
       ['Comparing against', `\`${baseBranch}\` branch`],
-      ['Build number', buildNumber],
-      ['Job number', jobNumber],
+      ['Build number (job)', `${buildNumber} (${jobNumber})`],
+      ['Lemmy', packageJson.version],
       ['System', os],
     ]);
 

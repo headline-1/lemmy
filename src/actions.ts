@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { Action } from './action.interface';
 import { Context } from './context';
-import { readdir } from './utils/promises';
+import { readdir, writeFile } from './utils/promises';
 
 const missingPropertyError = (path: string, property: string): Error =>
   new Error(`An action at "${path} is missing a "${property} property.`);
@@ -53,4 +53,24 @@ Argument purpose: ${arg.description}
     executionParams[arg.name] = value;
   });
   return action.execute(context, executionParams);
+};
+
+export const generateActionsDocument = async (outputPath: string) => {
+  let document = '## Actions\n\nActions are run exactly in order provided in `.lemmy.json`.\n\n';
+
+  document += 'Action | Description | Params\n--- | --- | ---\n';
+
+  const actions = await getActions();
+  document += actions.map((action) => {
+    const args = action.args
+      .map(arg => `\`${arg.name}\` \
+*(${arg.type}, ${arg.required ? 'required' : 'optional'})* - ${arg.description}\
+${arg.default !== undefined ? `; defaults to ${arg.default}` : '' }`)
+      .join('<br>') || 'None';
+    return `\`${action.name}\` | ${action.description} | ${args}`;
+  }).join('\n');
+
+  document += '\n\n';
+
+  await writeFile(outputPath, document, 'utf-8');
 };

@@ -1,5 +1,6 @@
 import 'babel-polyfill';
-import { executeAction, getActions } from './actions';
+import { executeAction, generateActionsDocument, getActions } from './actions';
+import { getArgs } from './args';
 import { getConfig } from './config';
 import { Context } from './context';
 import { Message } from './utils/message';
@@ -7,7 +8,7 @@ import { Message } from './utils/message';
 const run = async () => {
   let config;
   try {
-    config = await getConfig();
+    config = await getConfig(getArgs());
   } catch (error) {
     if (error.code === 'ENOENT') {
       console.log('Could not read configuration file. You can initialize lemmy by running `lemmy --init`.');
@@ -20,9 +21,15 @@ const run = async () => {
 
   const context: Context = { config, message };
 
+  if (config.args['actions-doc']) {
+    await generateActionsDocument(config.args['actions-doc']);
+    process.exit(0);
+    return;
+  }
+
   if (config.args.local === undefined && !config.git.pull) {
     console.log('Skipping Lemmy actions, because PR identifier hasn\'t been found.' +
-      'Add `--local` flag in order to run Lemmy locally.');
+      ' Add `--local` flag in order to run Lemmy locally.');
     process.exit(0);
     return;
   }
