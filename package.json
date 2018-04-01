@@ -1,6 +1,6 @@
 {
   "name": "lemmy",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Integrate Lemmy, and it will comment your PRs, answering a vital question \"Lemme know what's going on my CI server\"",
   "main": "run.js",
   "repository": "git@github.com:krzysztof-miemiec/lemmy.git",
@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "prompts": "^0.1.8",
     "request": "^2.83.0"
   }
 }

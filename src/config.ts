@@ -1,6 +1,9 @@
-import * as path from 'path';
-import {readline} from 'readline';
-import { exists, readdir, readFile } from './utils/promises';
+import prompts from 'prompts';
+import { Action } from './action.interface';
+import { getActions } from './actions';
+import { exists, readFile, writeFile } from './utils/promises';
+
+const JSON_SPACES = 2;
 
 type Args = {
   local?: string;
@@ -44,7 +47,7 @@ export const getConfig = async (configLocation: string = '.lemmy.json'): Promise
         'Add --force parameter if you really want to override existing configuration.');
       process.exit(1);
     }
-    createConfig(configLocation);
+    await createConfig(configLocation);
   }
   const file = await readFile(configLocation, 'utf-8');
   const config: Config = {
@@ -73,15 +76,26 @@ export const getConfig = async (configLocation: string = '.lemmy.json'): Promise
 const createConfig = async (configLocation: string): Promise<void> => {
   const config = { actions: [] };
 
-  const actions = (await readdir('./actions'))
-    .filter(file => file.endsWith('.js'))
-    .map(file => require(path.resolve(file)));
+  const actions = await getActions();
 
-  let line = readline()
-  while(readline){
-  }
-
-  actions.forEach((action) => {
-    console.log('Do you want to perform ' + action.name);
-  });
+  let response: Action<any> | undefined = undefined;
+  do {
+    response = await prompts([
+      {
+        type: 'select',
+        name: 'Action',
+        message: 'Pick an action to perform',
+        choices: [
+          { title: 'Done', value: undefined },
+          ...actions.map(action => ({ title: action.name, value: action })),
+        ],
+        initial: 1,
+      },
+    ]);
+    if (response) {
+      config.actions.push(response.name);
+    }
+  } while (response);
+  await writeFile(configLocation, JSON.stringify(config, null, JSON_SPACES), 'utf-8');
+  console.log('Configuration has been successfully saved!');
 };

@@ -1,10 +1,10 @@
+import { Action } from '../action.interface';
 import { Context } from '../context';
 import { TableAlignment } from '../utils/message';
 import { readFile } from '../utils/promises';
 
 interface Params {
-  name: 'changelog';
-  header: string;
+  header?: string;
   file?: string;
 }
 
@@ -61,54 +61,62 @@ interface TestResults {
   wasInterrupted: boolean;
 }
 
-export default async (ctx: Context, params: Params) => {
-  ctx.message.section(params.header || 'Jest');
-  if (!params.file) {
-    throw new Error('No "file" param specified. Please enter path to a JSON lint report file.');
-  }
-  let file: TestResults;
-  try {
-    file = JSON.parse(await readFile(params.file, 'utf-8'));
-  } catch (_) {
-    throw new Error(`Could not read report file at "${params.file}". It may not exist or it's not in JSON format.`);
-  }
-  if (file.success) {
-    ctx.message.add(':tada: All tests passed' +
-      (file.numPendingTests + file.numPendingTestSuites > 0 ? ', however some are still pending.' : '!'));
-  } else {
-    ctx.message.add(':exclamation: Some tests failed!');
-  }
-  const statsTable = [
-    ['Stats', 'Test Suites', 'Tests'],
-    [':green_heart: Passed', file.numPassedTestSuites, file.numPassedTests],
-    [':anger: Failed', file.numFailedTestSuites, file.numFailedTests],
-    [':grey_exclamation: Pending', file.numPendingTestSuites, file.numPendingTests],
-    file.numRuntimeErrorTestSuites && [':shit: Runtime errors', file.numRuntimeErrorTestSuites, ''],
-    [':raised_hands: **Total**', `**${file.numTotalTestSuites}**`, `**${file.numTotalTests}**`],
-  ];
-  ctx.message.table(statsTable, [TableAlignment.Left, TableAlignment.Right, TableAlignment.Right]);
+export const action: Action<Params> = {
+  name: 'changelog',
+  description: 'Prepares a report from Jest\'s JSON output.',
+  args: [
+    { name: 'header', type: 'string', description: 'a custom header', default: 'Jest' },
+    { name: 'file', type: 'string', description: 'path to a test report file in repository' },
+  ],
+  execute: async (ctx: Context, params: Params) => {
+    ctx.message.section(params.header);
+    if (!params.file) {
+      throw new Error('No "file" param specified. Please enter path to a JSON lint report file.');
+    }
+    let file: TestResults;
+    try {
+      file = JSON.parse(await readFile(params.file, 'utf-8'));
+    } catch (ignored) {
+      throw new Error(`Could not read report file at "${params.file}". It may not exist or it's not in JSON format.`);
+    }
+    if (file.success) {
+      ctx.message.add(':tada: All tests passed' +
+        (file.numPendingTests + file.numPendingTestSuites > 0 ? ', however some are still pending.' : '!'));
+    } else {
+      ctx.message.add(':exclamation: Some tests failed!');
+    }
+    const statsTable = [
+      ['Stats', 'Test Suites', 'Tests'],
+      [':green_heart: Passed', file.numPassedTestSuites, file.numPassedTests],
+      [':anger: Failed', file.numFailedTestSuites, file.numFailedTests],
+      [':grey_exclamation: Pending', file.numPendingTestSuites, file.numPendingTests],
+      file.numRuntimeErrorTestSuites && [':shit: Runtime errors', file.numRuntimeErrorTestSuites, ''],
+      [':raised_hands: **Total**', `**${file.numTotalTestSuites}**`, `**${file.numTotalTests}**`],
+    ];
+    ctx.message.table(statsTable, [TableAlignment.Left, TableAlignment.Right, TableAlignment.Right]);
 
-  if (!file.success) {
-    const failedTests = [['Location', 'Line', 'Title', 'Message']];
-    file.testResults
-      .forEach((result) => {
-        if (result.status !== 'failed') {
-          return;
-        }
-        result.assertionResults.forEach((assertion) => {
-          if (assertion.status !== 'failed') {
+    if (!file.success) {
+      const failedTests = [['Location', 'Line', 'Title', 'Message']];
+      file.testResults
+        .forEach((result) => {
+          if (result.status !== 'failed') {
             return;
           }
-          failedTests.push([
-            `\`${result.name.replace(ctx.config.ci.buildDir, '')}\``,
-            assertion.location ? `\`${assertion.location.line}:${assertion.location.column}\`` : '-',
-            [...assertion.ancestorTitles, assertion.title].join(' > '),
-            assertion.failureMessages.map(e => `\`${e.replace(/\n/g, '`<br>`')}\``).join('<br>'),
-          ]);
+          result.assertionResults.forEach((assertion) => {
+            if (assertion.status !== 'failed') {
+              return;
+            }
+            failedTests.push([
+              `\`${result.name.replace(ctx.config.ci.buildDir, '')}\``,
+              assertion.location ? `\`${assertion.location.line}:${assertion.location.column}\`` : '-',
+              [...assertion.ancestorTitles, assertion.title].join(' > '),
+              assertion.failureMessages.map(e => `\`${e.replace(/\n/g, '`<br>`')}\``).join('<br>'),
+            ]);
+          });
+          failedTests.push([]);
         });
-        failedTests.push([]);
-      });
-    ctx.message.add('**Errors:**');
-    ctx.message.table(failedTests, [undefined, TableAlignment.Center]);
-  }
+      ctx.message.add('**Errors:**');
+      ctx.message.table(failedTests, [undefined, TableAlignment.Center]);
+    }
+  },
 };
