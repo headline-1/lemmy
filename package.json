@@ -1,6 +1,6 @@
 {
   "name": "lemmy",
-  "version": "0.0.6",
+  "version": "0.0.9",
   "description": "Integrate Lemmy, and it will comment your PRs, answering a vital question \"Lemme know what's going on my CI server\"",
   "main": "run.js",
   "repository": "git@github.com:krzysztof-miemiec/lemmy.git",
