@@ -1,42 +1,57 @@
 import 'babel-polyfill';
+import { executeAction, generateActionsDocument, getActions } from './actions';
+import { getArgs } from './args';
 import { getConfig } from './config';
 import { Context } from './context';
 import { Message } from './utils/message';
 
 const run = async () => {
-  const config = await getConfig();
+  let config;
+  try {
+    config = await getConfig(getArgs());
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      console.log('Could not read configuration file. You can initialize lemmy by running `lemmy --init`.');
+    } else {
+      console.error(error);
+    }
+    return;
+  }
   const message = new Message();
 
   const context: Context = { config, message };
-  const errors: string[] = [];
 
-  if (config.args.local === undefined && !config.git.pull) {
-    console.log('Skipping Lemmy actions, because PR identifier hasn\'t been found.' +
-      'Add `--local` flag in order to run Lemmy locally.');
+  if (config.args['actions-doc']) {
+    await generateActionsDocument(config.args['actions-doc']);
     process.exit(0);
     return;
   }
 
-  for (const action of config.actions) {
-    let module;
-    try {
-      module = await require('./actions/' + action.name);
-    } catch (ignored) {
-      throw new Error(`Can not find an action "${action.name}"`);
+  if (config.args.local === undefined && !config.git.pull) {
+    console.log('Skipping Lemmy actions, because PR identifier hasn\'t been found.' +
+      ' Add `--local` flag in order to run Lemmy locally.');
+    process.exit(0);
+    return;
+  }
+
+  let errorsOccurred = false;
+  const actions = await getActions();
+
+  for (const actionEntry of config.actions) {
+    const action = actions.find(action => action.name === actionEntry.name);
+    if (!action) {
+      throw new Error(`Can not find an action "${actionEntry.name}"`);
     }
-    if (!module.default) {
-      throw new Error(`An action "${action.name}" does not have a valid entry point (export default function).`);
-    }
-    console.log(`Running action: ${action.name}`);
+    console.log(` ➡ ${action.name}`);
     try {
-      await module.default(context, action);
+      await executeAction(action, context, actionEntry);
     } catch (err) {
+      errorsOccurred = true;
+      console.log(` ✖ ${err.message}`);
       message.error(err.message);
-      errors.push(action.name + ': ' + err.message);
     }
   }
-  if (errors.length) {
-    console.log(errors.join('\n'));
+  if (errorsOccurred) {
     process.exit(1);
   }
 };

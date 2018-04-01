@@ -1,3 +1,9 @@
+# 0.1.0
+
+* [FIX] Improved git reliability and fixed stash bug
+* [NEW] Action typings and reworked action structure
+* [NEW] `init` command
+
 # 0.0.9
 
 * [FIX] Git pull fix.

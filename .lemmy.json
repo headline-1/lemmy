@@ -1,14 +1,21 @@
 {
   "actions": [
-    "packageVersion",
-    "changelog",
+    {
+      "name": "packageVersion",
+      "file": "package.json"
+    },
+    {
+      "name": "changelog",
+      "file": "CHANGELOG.md"
+    },
     {
       "name": "lint",
-      "file": "reports/lint.json"
+      "header": "Lint",
+      "file": "./reports/lint.json"
     },
     {
       "name": "githubComment",
-      "oneCommentPerCommit": true
+      "oneCommentPerCommit": false
     },
     "stdout"
   ]

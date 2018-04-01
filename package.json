@@ -1,6 +1,6 @@
 {
   "name": "lemmy",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Integrate Lemmy, and it will comment your PRs, answering a vital question \"Lemme know what's going on my CI server\"",
   "main": "run.js",
   "repository": "git@github.com:krzysztof-miemiec/lemmy.git",
@@ -9,8 +9,9 @@
   "private": false,
   "scripts": {
     "lint": "mkdir -p reports && tslint './src/**/*.{js,ts}' --project ./ --format json --out './reports/lint.json' || tslint './src/**/*.{js,ts}' --project ./ --format stylish",
+    "gen-docs": "yarn start --actions-doc='./docs/actions.md'",
     "start": "node dist/index.js",
-    "build": "tsc && babel build --out-dir dist"
+    "build": "tsc && babel build --out-dir dist && yarn gen-docs"
   },
   "bin": {
     "lemmy": "./run.js"
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "prompts": "^0.1.8",
     "request": "^2.83.0"
   }
 }

@@ -17,6 +17,7 @@
     "noUnusedLocals": true
   },
   "include": [
+    "./types/*.d.ts",
     "./src/**/*.ts",
     "./src/**/*.js",
     "./src/**/*.json"
