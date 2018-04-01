@@ -1,13 +1,12 @@
 {
   "actions": [
     {
-      "name": "changelog",
-      "file": "CHANGELOG.md"
+      "name": "packageVersion",
+      "file": "package.json"
     },
     {
-      "name": "jest",
-      "header": "Jest",
-      "file": "./reports/test.json"
+      "name": "changelog",
+      "file": "CHANGELOG.md"
     },
     {
       "name": "lint",
@@ -15,12 +14,9 @@
       "file": "./reports/lint.json"
     },
     {
-      "name": "packageVersion",
-      "file": "package.json"
-    },
-    {
       "name": "githubComment",
       "oneCommentPerCommit": false
-    }
+    },
+    "stdout"
   ]
 }
