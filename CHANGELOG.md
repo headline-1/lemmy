@@ -1,4 +1,8 @@
-# 0.1.0
+# 0.0.12
+
+* [FIX] Fixed issues with env vars not passed to git properly
+
+# 0.0.11
 
 * [FIX] Improved git reliability and fixed stash bug
 * [NEW] Action typings and reworked action structure
