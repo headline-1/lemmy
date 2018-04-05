@@ -1,7 +1,7 @@
 import { Context } from '../context';
 import { exec } from './promises';
 
-const GIT_OPTIONS = { env: { LANG: 'en_US' } };
+const GIT_OPTIONS = { env: { LANG: 'en_US', ...process.env } };
 
 export const git = {
   getBranch: async (branch: string, remote?: string): Promise<void> => {
