@@ -15,7 +15,7 @@
     },
     {
       "name": "githubComment",
-      "oneCommentPerCommit": false
+      "oneCommentPerCommit": true
     },
     "stdout"
   ]

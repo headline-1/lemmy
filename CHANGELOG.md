@@ -1,3 +1,7 @@
+# 0.0.13
+
+* [FIX] Do not comment the same commit twice when the last Lemmy comment isn't about the commit.
+
 # 0.0.12
 
 * [FIX] Fixed issues with env vars not passed to git properly

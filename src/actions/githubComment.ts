@@ -64,13 +64,12 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
     const comments = await get(commentsUrl, requestOptions);
     const myComments = comments.body.filter(comment => comment.user.id === userId);
     let skipComment = false;
-    if (myComments.length > 0) {
-      const commentBody = myComments[myComments.length - 1].body;
-      const commitMatch = commentBody.match(/^:octocat: Commit\s*\|\s*(.+)\s*$/m);
+    myComments.forEach((comment) => {
+      const commitMatch = comment.body.match(/^:octocat: Commit\s*\|\s*(.+)\s*$/m);
       if (commitMatch && commitMatch[1] === commit) {
-        skipComment = params.oneCommentPerCommit;
+        skipComment = skipComment || params.oneCommentPerCommit;
       }
-    }
+    });
 
     // Post comment!
     if (!skipComment) {
