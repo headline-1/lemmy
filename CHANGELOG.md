@@ -1,3 +1,7 @@
+# 0.1.0
+
+* [NEW] Automatically remove old comments, with three policies to fit users' needs.
+
 # 0.0.13
 
 * [FIX] Do not comment the same commit twice when the last Lemmy comment isn't about the commit.

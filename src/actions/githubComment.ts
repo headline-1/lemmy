@@ -1,12 +1,27 @@
 import packageJson from '../../package.json';
 import { Action } from '../action.interface';
 import { Context } from '../context';
-import { get, post } from '../utils/request';
+import { del, get, post } from '../utils/request';
 
 const BASE_URL = 'https://api.github.com/';
 
+interface GithubComment {
+  id: number;
+  url: string;
+  body: string;
+  user: {
+    id: string;
+    login: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+
+const githubCommentCreatedAtComparator = (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+
 interface Params {
   oneCommentPerCommit?: boolean;
+  removalPolicy?: 'always' | 'never' | 'onlyLastComment';
 }
 
 export const action: Action<Params> = {
@@ -20,6 +35,13 @@ export const action: Action<Params> = {
       name: 'oneCommentPerCommit',
       description: 'set to true, if you want Lemmy to comment only once per build (useful for matrix builds)',
       type: 'boolean',
+    },
+    {
+      name: 'removalPolicy',
+      description: 'determines whether (and when) Lemmy should remove it\'s own previous comments' +
+      ' - by default all comments are retained',
+      type: 'string',
+      default: 'never',
     },
   ],
   execute: async (ctx: Context, params: Params) => {
@@ -47,10 +69,15 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
       ['System', os],
     ]);
 
-    const commentsUrl = `/repos/${repo}/issues/${pull}/comments`;
+    const issueCommentsUrl = `/repos/${repo}/issues/${pull}/comments`;
     const requestOptions = {
       baseUrl: BASE_URL,
       json: true,
+      headers: {
+        Authorization: `token ${ctx.config.message.github}`,
+      },
+    };
+    const deleteRequestOptions = {
       headers: {
         Authorization: `token ${ctx.config.message.github}`,
       },
@@ -61,8 +88,8 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
     const userId = user.body.id;
 
     // Have I posted earlier on the same commit?
-    const comments = await get(commentsUrl, requestOptions);
-    const myComments = comments.body.filter(comment => comment.user.id === userId);
+    const comments: GithubComment[] = (await get(issueCommentsUrl, requestOptions)).body;
+    const myComments = comments.filter(comment => comment.user.id === userId);
     let skipComment = false;
     myComments.forEach((comment) => {
       const commitMatch = comment.body.match(/^:octocat: Commit\s*\|\s*(.+)\s*$/m);
@@ -71,9 +98,32 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
       }
     });
 
-    // Post comment!
     if (!skipComment) {
-      const response = await post(commentsUrl, {
+      // Remove previous comments
+      switch (params.removalPolicy) {
+        case 'always':
+          console.log(`Removing all my previous comments...`);
+          for (const comment of myComments) {
+            await del(comment.url, deleteRequestOptions);
+          }
+          console.log(`Successfully removed ${myComments.length} comments.`);
+          break;
+        case 'onlyLastComment':
+          console.log(`Removing my last comment...`);
+
+          const lastComment = comments.length > 0 && comments.sort(
+            githubCommentCreatedAtComparator
+          )[comments.length - 1];
+          if (lastComment && lastComment.user.id === userId) {
+            await del(lastComment.url, deleteRequestOptions);
+            console.log(`Successfully removed my last comment.`);
+          }
+          break;
+        default:
+          break;
+      }
+      // Post a comment!
+      const response = await post(issueCommentsUrl, {
         ...requestOptions,
         body: { body: ctx.message.get() },
       });
