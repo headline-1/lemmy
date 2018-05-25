@@ -69,10 +69,15 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
       ['System', os],
     ]);
 
-    const commentsUrl = `/repos/${repo}/issues/${pull}/comments`;
+    const issueCommentsUrl = `/repos/${repo}/issues/${pull}/comments`;
     const requestOptions = {
       baseUrl: BASE_URL,
       json: true,
+      headers: {
+        Authorization: `token ${ctx.config.message.github}`,
+      },
+    };
+    const deleteRequestOptions = {
       headers: {
         Authorization: `token ${ctx.config.message.github}`,
       },
@@ -83,7 +88,7 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
     const userId = user.body.id;
 
     // Have I posted earlier on the same commit?
-    const comments: GithubComment[] = (await get(commentsUrl, requestOptions)).body;
+    const comments: GithubComment[] = (await get(issueCommentsUrl, requestOptions)).body;
     const myComments = comments.filter(comment => comment.user.id === userId);
     let skipComment = false;
     myComments.forEach((comment) => {
@@ -99,7 +104,7 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
         case 'always':
           console.log(`Removing all my previous comments...`);
           for (const comment of myComments) {
-            await del(`${commentsUrl}/${comment.id}`, requestOptions);
+            await del(comment.url, deleteRequestOptions);
           }
           break;
         case 'onlyLastComment':
@@ -109,14 +114,14 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
             githubCommentCreatedAtComparator
           )[comments.length - 1];
           if (lastComment && lastComment.user.id === userId) {
-            await del(`${commentsUrl}/${lastComment.id}`, requestOptions);
+            await del(lastComment.url, deleteRequestOptions);
           }
           break;
         default:
           break;
       }
       // Post a comment!
-      const response = await post(commentsUrl, {
+      const response = await post(issueCommentsUrl, {
         ...requestOptions,
         body: { body: ctx.message.get() },
       });
