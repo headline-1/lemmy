@@ -16,7 +16,7 @@
     {
       "name": "githubComment",
       "oneCommentPerCommit": true,
-      "removalPolicy": "onlyLastComment"
+      "removalPolicy": "always"
     },
     "stdout"
   ]
