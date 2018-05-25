@@ -106,15 +106,17 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
           for (const comment of myComments) {
             await del(comment.url, deleteRequestOptions);
           }
+          console.log(`Successfully removed ${myComments.length} comments.`);
           break;
         case 'onlyLastComment':
-          console.log(`Removing all my previous comments...`);
+          console.log(`Removing my last comment...`);
 
           const lastComment = comments.length > 0 && comments.sort(
             githubCommentCreatedAtComparator
           )[comments.length - 1];
           if (lastComment && lastComment.user.id === userId) {
             await del(lastComment.url, deleteRequestOptions);
+            console.log(`Successfully removed my last comment.`);
           }
           break;
         default:
