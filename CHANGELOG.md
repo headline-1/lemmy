@@ -1,3 +1,11 @@
+# 0.2.0
+
+* [NEW] Coverage action
+* [NEW] Collapsible sections in comments
+* [FIX] Broken newline in actions fix
+* [IMP] Improved formatting
+* [DEV] Updated dependencies
+
 # 0.1.0
 
 * [NEW] Automatically remove old comments, with three policies to fit users' needs.

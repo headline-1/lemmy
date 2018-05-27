@@ -28,8 +28,8 @@ export const action: Action<Params> = {
   name: 'githubComment',
   description: 'Sends a Markdown-formatted message as a GitHub Pull Request comment. ' +
   'PR number and repository name are inferred from CI\'s env vars,' +
-  ' **however `GITHUB_TOKEN` env var has to be provided**.\n' +
-  'In case of Travis CI, it can be done either in `.travis.yml` (use secure mechanism) or in configuration section.',
+  ' **however `GITHUB_TOKEN` env var has to be provided**.' +
+  ' In case of Travis CI, it can be done either in `.travis.yml` (use secure mechanism) or in configuration section.',
   args: [
     {
       name: 'oneCommentPerCommit',
@@ -45,6 +45,10 @@ export const action: Action<Params> = {
     },
   ],
   execute: async (ctx: Context, params: Params) => {
+    if (ctx.config.args.local) {
+      console.log('Skipping githubComment action for a local run.');
+      return;
+    }
     if (!ctx.config.message.github) {
       throw new Error(`Github token is missing. \
 Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
@@ -60,24 +64,22 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
       return;
     }
 
-    ctx.message.table([
-      ['Summary', 'Value'],
-      [':octocat: Commit', commit],
-      ['Comparing against', `\`${baseBranch}\` branch`],
-      ['Build number (job)', `${buildNumber} (${jobNumber})`],
-      ['Lemmy', packageJson.version],
-      ['System', os],
-    ]);
+    ctx.message
+      .collapsibleSection('Build information')
+      .table([
+        ['Summary', 'Value'],
+        [':octocat: Commit', commit],
+        ['Comparing against', `\`${baseBranch}\` branch`],
+        ['Build number (job)', `${buildNumber} (${jobNumber})`],
+        ['Lemmy', packageJson.version],
+        ['System', os],
+      ])
+      .collapsibleSectionEnd();
 
     const issueCommentsUrl = `/repos/${repo}/issues/${pull}/comments`;
     const requestOptions = {
       baseUrl: BASE_URL,
       json: true,
-      headers: {
-        Authorization: `token ${ctx.config.message.github}`,
-      },
-    };
-    const deleteRequestOptions = {
       headers: {
         Authorization: `token ${ctx.config.message.github}`,
       },
@@ -100,6 +102,11 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
 
     if (!skipComment) {
       // Remove previous comments
+      const deleteRequestOptions = {
+        headers: {
+          Authorization: `token ${ctx.config.message.github}`,
+        },
+      };
       switch (params.removalPolicy) {
         case 'always':
           console.log(`Removing all my previous comments...`);

@@ -1,6 +1,7 @@
 import { Action } from '../action.interface';
 import { Context } from '../context';
 import { readFile } from '../utils/promises';
+import { asCode, asCollapsedPath } from '../utils/message';
 
 interface Params {
   header: string;
@@ -47,8 +48,8 @@ export const action: Action<Params> = {
     const table = [['Location', 'Line', 'Failure', 'Rule']];
     file.forEach((fail) => {
       table.push([
-        `\`${fail.name.replace(ctx.config.ci.buildDir, '')}\``,
-        `\`${fail.startPosition.line}:${fail.startPosition.character}\``,
+        asCollapsedPath(fail.name.replace(ctx.config.ci.buildDir, '')),
+        asCode(`${fail.startPosition.line}:${fail.startPosition.character}`),
         fail.failure,
         fail.ruleName,
       ]);

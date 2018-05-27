@@ -1,6 +1,6 @@
 import { Action } from '../action.interface';
 import { Context } from '../context';
-import { TableAlignment } from '../utils/message';
+import { asCode, asCollapsedPath, TableAlignment } from '../utils/message';
 import { readFile } from '../utils/promises';
 
 interface Params {
@@ -83,7 +83,7 @@ export const action: Action<Params> = {
       ctx.message.add(':tada: All tests passed' +
         (file.numPendingTests + file.numPendingTestSuites > 0 ? ', however some are still pending.' : '!'));
     } else {
-      ctx.message.add(':exclamation: Some tests failed!');
+      ctx.message.error('Some tests failed!');
     }
     const statsTable = [
       ['Stats', 'Test Suites', 'Tests'],
@@ -107,10 +107,10 @@ export const action: Action<Params> = {
               return;
             }
             failedTests.push([
-              `\`${result.name.replace(ctx.config.ci.buildDir, '')}\``,
-              assertion.location ? `\`${assertion.location.line}:${assertion.location.column}\`` : '-',
+              asCollapsedPath(result.name.replace(ctx.config.ci.buildDir, '')),
+              asCode(assertion.location ? `${assertion.location.line}:${assertion.location.column}` : '-'),
               [...assertion.ancestorTitles, assertion.title].join(' > '),
-              assertion.failureMessages.map(e => `\`${e.replace(/\n/g, '`<br>`')}\``).join('<br>'),
+              assertion.failureMessages.map(asCode).join('<br>'),
             ]);
           });
           failedTests.push([]);
