@@ -34,7 +34,7 @@ const getComments = async (issueCommentsUrl: string, requestOptions: CoreOptions
 const shouldSkipComment = (commit: string, oneCommentPerCommit: boolean, myComments: GithubComment[]) => {
   let skipComment = false;
   myComments.forEach((comment) => {
-    const commitMatch = comment.body.match(/^:octocat: Commit\s*\|\s*(.+)\s*$/m);
+    const commitMatch = comment.body.match(/:octocat: Commit\s*\|\s*(.+)\s*/);
     if (commitMatch && commitMatch[1] === commit) {
       skipComment = skipComment || oneCommentPerCommit;
     }
