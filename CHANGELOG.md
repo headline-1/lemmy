@@ -1,3 +1,7 @@
+# 0.2.2
+
+* [FIX] Don't post twice on same commit (check fix 2 - as previous didn't work)
+
 # 0.2.1
 
 * [FIX] Don't post twice on same commit (check fix)
