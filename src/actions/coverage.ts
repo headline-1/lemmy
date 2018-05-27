@@ -92,7 +92,7 @@ const getThresholdSignFunction = (warnThreshold: number, errorThreshold: number)
       ? ':warning:'
       : ':white_check_mark:';
 
-const isFullyCovered = (line: CoverageStatLine) => !isBelowThreshold(100, line);
+const isFullyCovered = (line: CoverageStatLine) => !isBelowThreshold(99.99, line);
 
 const formatStatLine = (getThresholdSign: (stat: CoverageStat) => string) =>
   (name: string, property: keyof CoverageStatLine, line: CoverageStatLine): string[] => ([
