@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./build",
     "module": "es2015",
-    "target": "es2015",
+    "target": "es2017",
     "moduleResolution": "node",
     "rootDir": "./src",
     "allowSyntheticDefaultImports": true,

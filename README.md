@@ -17,6 +17,8 @@ You'll obviously need Node.js and NPM or Yarn. Add a package as follows:
 
 ```bash
 npm install lemmy --save-dev
+# or
+yarn install lemmy -D
 ```
 
 Then add `.lemmy.json` configuration file and define some actions inside:
@@ -52,7 +54,9 @@ Next, add Lemmy to `package.json` scripts for simplicity:
 
 And run it manually *after you run linter and tests* to check if everything works:
 ```bash
-npm run lemmy
+npm run lemmy --local
+# or
+yarn lemmy --local
 ```
 
 If you have included `stdout` action, you should see a Markdown output that is exactly the same as the one that is sent as a comment to your PR.
@@ -67,3 +71,7 @@ You should be ready to add the above command as a step in `.travis.yml` in scrip
 ## Actions
 
 For complete list of actions, see [Action Docs](./docs/actions.md).
+
+## Changelog
+
+See [Changelog](./CHANGELOG.md).
