@@ -1,3 +1,4 @@
+import { CoreOptions } from 'request';
 import packageJson from '../../package.json';
 import { Action } from '../action.interface';
 import { Context } from '../context';
@@ -17,12 +18,57 @@ interface GithubComment {
   updated_at: string;
 }
 
-const githubCommentCreatedAtComparator = (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+const githubCommentCreatedAtComparator = (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
 
 interface Params {
   oneCommentPerCommit?: boolean;
   removalPolicy?: 'always' | 'never' | 'onlyLastComment';
 }
+
+const getComments = async (issueCommentsUrl: string, requestOptions: CoreOptions, userId: string) => {
+  const comments: GithubComment[] = (await get(issueCommentsUrl, requestOptions)).body;
+  const myComments = comments.filter(comment => comment.user.id === userId);
+  return { comments, myComments };
+};
+
+const shouldSkipComment = (commit: string, oneCommentPerCommit: boolean, myComments: GithubComment[]) => {
+  let skipComment = false;
+  myComments.forEach((comment) => {
+    const commitMatch = comment.body.match(/^:octocat: Commit\s*\|\s*(.+)\s*$/m);
+    if (commitMatch && commitMatch[1] === commit) {
+      skipComment = skipComment || oneCommentPerCommit;
+    }
+  });
+  return skipComment;
+};
+
+const removeComments = async (ctx: Context, myComments: GithubComment[], removalPolicy: string) => {
+  const deleteRequestOptions = {
+    headers: {
+      Authorization: `token ${ctx.config.message.github}`,
+    },
+  };
+  switch (removalPolicy) {
+    case 'always':
+      console.log(`Removing all my previous comments...`);
+      for (const comment of myComments) {
+        await del(comment.url, deleteRequestOptions);
+      }
+      console.log(`Successfully removed ${myComments.length} comments.`);
+      break;
+    case 'onlyLastComment':
+      console.log(`Removing my last comment...`);
+
+      const lastComment = myComments.length > 0 && myComments.sort(githubCommentCreatedAtComparator)[0];
+      if (lastComment) {
+        await del(lastComment.url, deleteRequestOptions);
+        console.log(`Successfully removed my last comment.`);
+      }
+      break;
+    default:
+      break;
+  }
+};
 
 export const action: Action<Params> = {
   name: 'githubComment',
@@ -90,45 +136,12 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
     const userId = user.body.id;
 
     // Have I posted earlier on the same commit?
-    const comments: GithubComment[] = (await get(issueCommentsUrl, requestOptions)).body;
-    const myComments = comments.filter(comment => comment.user.id === userId);
-    let skipComment = false;
-    myComments.forEach((comment) => {
-      const commitMatch = comment.body.match(/^:octocat: Commit\s*\|\s*(.+)\s*$/m);
-      if (commitMatch && commitMatch[1] === commit) {
-        skipComment = skipComment || params.oneCommentPerCommit;
-      }
-    });
+    const { myComments } = await getComments(issueCommentsUrl, requestOptions, userId);
+    const skipComment = shouldSkipComment(commit, params.oneCommentPerCommit, myComments);
 
     if (!skipComment) {
       // Remove previous comments
-      const deleteRequestOptions = {
-        headers: {
-          Authorization: `token ${ctx.config.message.github}`,
-        },
-      };
-      switch (params.removalPolicy) {
-        case 'always':
-          console.log(`Removing all my previous comments...`);
-          for (const comment of myComments) {
-            await del(comment.url, deleteRequestOptions);
-          }
-          console.log(`Successfully removed ${myComments.length} comments.`);
-          break;
-        case 'onlyLastComment':
-          console.log(`Removing my last comment...`);
-
-          const lastComment = comments.length > 0 && comments.sort(
-            githubCommentCreatedAtComparator
-          )[comments.length - 1];
-          if (lastComment && lastComment.user.id === userId) {
-            await del(lastComment.url, deleteRequestOptions);
-            console.log(`Successfully removed my last comment.`);
-          }
-          break;
-        default:
-          break;
-      }
+      await removeComments(ctx, myComments, params.removalPolicy);
       // Post a comment!
       const response = await post(issueCommentsUrl, {
         ...requestOptions,
