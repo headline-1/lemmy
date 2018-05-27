@@ -1,3 +1,7 @@
+# 0.2.1
+
+* [FIX] Don't post twice on same commit (check fix)
+
 # 0.2.0
 
 * [NEW] Coverage action
