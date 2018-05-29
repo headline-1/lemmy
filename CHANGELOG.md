@@ -1,3 +1,8 @@
+# 0.3.0
+
+* Lemmy moved to @headline-1 organization
+* Documentation improvements (work in progress)
+
 # 0.2.2
 
 * [FIX] Don't post twice on same commit (check fix 2 - as previous didn't work)

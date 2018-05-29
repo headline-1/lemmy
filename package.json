@@ -1,9 +1,9 @@
 {
-  "name": "lemmy",
-  "version": "0.2.2",
+  "name": "@h1/lemmy",
+  "version": "0.3.0",
   "description": "Integrate Lemmy, and it will comment your PRs, answering a vital question \"Lemme know what's going on my CI server\"",
   "main": "run.js",
-  "repository": "git@github.com:krzysztof-miemiec/lemmy.git",
+  "repository": "git@github.com:headline-1/lemmy.git",
   "author": "Krzysztof Miemiec <krzysztof.miemiec@gmail.com>",
   "license": "MIT",
   "private": false,
