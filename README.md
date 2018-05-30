@@ -1,77 +1,38 @@
-# Lemmy
-Integrate Lemmy, and it will comment your PRs, answering a vital question "Lemme know what's going on my CI server".
+![Lemmy Logo](docs/lemmy.svg)
 
-### Motivation
-There were no free, open-source solutions (besides [Danger.js](https://github.com/danger/danger-js), which didn't work well for me) that allow to simply comment on Pull Requests, providing basic information on how are the things going on CI.
+# What's this?
 
-### Features
+Lemmy is a tool that comments your Pull Requests. You don't have to browse logs on your CI/CD system anymore to get some valuable information about the build.
 
-* Github PR comment support
-* Travis environment support
-* Standard set of actions which compile into a report
-* Humble emoji set to decorate messages (this one should be #1 feature)
+# Sample output
 
-### Setup
+___
 
-You'll obviously need Node.js and NPM or Yarn. Add a package as follows:
+### Changelog
+:tada: Changelog has been updated properly.
 
-```bash
-npm install lemmy --save-dev
-# or
-yarn install lemmy -D
-```
+### Jest
+:exclamation: **Could not read report file at "./reports/test.json". It may not exist or it's not in JSON format.**
 
-Then add `.lemmy.json` configuration file and define some actions inside:
+### Lint
+:exclamation: **Linter reported errors.**
 
-```json
-{
-  "actions": [
-    "packageVersion",
-    "changelog",
-    {
-      "name": "lint",
-      "file": "reports/lint.json"
-    },
-    {
-      "name": "jest",
-      "file": "reports/test.json"
-    },
-    "stdout"
-  ]
-}
-```
+Location | Line | Failure | Rule
+--- | --- | --- | ---
+`/src/config.ts` | `39:10` | variable 'createConfig' used before declaration | no-use-before-declare
 
-You can also use `lemmy --init` command to add actions step by step. Remember about execution order!
 
-Next, add Lemmy to `package.json` scripts for simplicity:
-```json
-{
-  "scripts": {
-    "lemmy": "lemmy"
-  }
-}
-```
+### Version
+:tada: Package version has been updated properly.
 
-And run it manually *after you run linter and tests* to check if everything works:
-```bash
-npm run lemmy --local
-# or
-yarn lemmy --local
-```
+Summary | Value
+--- | ---
+:octocat: Commit | b4404a9728a00cab771c7d29afc668db37a45f46
+Comparing against | `master` branch
+Build number (job) | 54 (54.1)
+Lemmy | 0.0.10
+System | linux
 
-If you have included `stdout` action, you should see a Markdown output that is exactly the same as the one that is sent as a comment to your PR.
+___
 
-##### GitHub
-
-To configure GitHub integration and obtain the token, follow the instructions in [docs](./docs/github.md).
-
-##### Travis
-You should be ready to add the above command as a step in `.travis.yml` in script section, after running linter/tests.
-
-## Actions
-
-For complete list of actions, see [Action Docs](./docs/actions.md).
-
-## Changelog
-
-See [Changelog](./CHANGELOG.md).
+### [See the docs on GitBook](https://h-1.gitbook.io/lemmy/)
