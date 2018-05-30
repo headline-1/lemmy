@@ -1,3 +1,5 @@
+![Lemmy Logo](lemmy.svg)
+
 # Lemmy
 Integrate Lemmy, and it will comment your PRs, answering a vital question "Lemme know what's going on my CI server".
 
