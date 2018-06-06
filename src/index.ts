@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import { executeAction, generateActionsDocument, getActions } from './actions';
-import { getArgs } from './args';
-import { getConfig } from './config';
+import { getArgs } from './config/args';
+import { getConfig } from './config/config';
 import { Context } from './context';
 import { Message } from './utils/message';
 
