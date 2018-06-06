@@ -1,9 +1,4 @@
-export type Args = {
-  local?: string;
-  init?: boolean;
-  force?: boolean;
-  'actions-doc'?: string;
-};
+import { Args } from './config.interface';
 
 export const getArgs = () => {
   const args: Args = {};

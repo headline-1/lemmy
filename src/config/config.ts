@@ -1,30 +1,9 @@
 import { createConfig } from '../create-config';
-import { deepMerge } from '../utils/general';
-import { exists, readFile } from '../utils/promises';
-import { Args } from './args';
+import { deepMerge } from '../utils/general.util';
+import { exists, readFile } from '../utils/promises.util';
 import { Circle } from './ci/circle.ci';
 import { Travis } from './ci/travis.ci';
-
-export interface Config {
-  args: Args;
-  git: {
-    baseBranch?: string;
-    repo?: string;
-    pull?: string;
-    commit?: string;
-  };
-  ci: {
-    name: string;
-    os?: string;
-    buildNumber?: string;
-    jobNumber?: string;
-    buildDir?: string;
-  };
-  message: {
-    github?: string;
-  };
-  actions: any[];
-}
+import { Args, Config } from './config.interface';
 
 export const getConfig = async (args: Args, configLocation: string = '.lemmy.json'): Promise<Config> => {
   if (args.init) {

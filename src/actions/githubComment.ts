@@ -2,7 +2,7 @@ import { CoreOptions } from 'request';
 import packageJson from '../../package.json';
 import { Action } from '../action.interface';
 import { Context } from '../context';
-import { del, get, post } from '../utils/request';
+import { del, get, post } from '../utils/request.util';
 
 const BASE_URL = 'https://api.github.com/';
 

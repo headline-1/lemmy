@@ -1,6 +1,6 @@
 import { Action } from '../action.interface';
 import { Context } from '../context';
-import { git } from '../utils/git';
+import { git } from '../utils/git.util';
 
 interface Params {
   file: string;

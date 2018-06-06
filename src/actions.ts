@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { Action } from './action.interface';
 import { Context } from './context';
-import { readdir, writeFile } from './utils/promises';
+import { readdir, writeFile } from './utils/promises.util';
 
 const missingPropertyError = (path: string, property: string): Error =>
   new Error(`An action at "${path} is missing a "${property} property.`);

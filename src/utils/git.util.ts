@@ -1,5 +1,5 @@
 import { Context } from '../context';
-import { exec } from './promises';
+import { exec } from './promises.util';
 
 const GIT_OPTIONS = { env: { LANG: 'en_US', ...process.env } };
 

@@ -1,7 +1,7 @@
 import prompts from 'prompts';
 import { Action, ActionArgument } from './action.interface';
 import { getActions } from './actions';
-import { writeFile } from './utils/promises';
+import { writeFile } from './utils/promises.util';
 
 const JSON_SPACES = 2;
 

@@ -1,0 +1,25 @@
+{
+  "transform": {
+    "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest",
+    "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+  },
+  "testRegex": "/src/.*\\.(test|spec)\\.ts$",
+  "testPathIgnorePatterns": [
+    "<rootDir>/node_modules/",
+    "<rootDir>/lib/"
+  ],
+  "moduleFileExtensions": [
+    "ts",
+    "js",
+    "json"
+  ],
+  "setupFiles": [
+    "./src/specs/setup.ts"
+  ],
+  "collectCoverageFrom": [
+    "src/**/*.{ts}"
+  ],
+  "coverageDirectory": "reports/coverage",
+  "coverageReporters": ["json", "lcov"],
+  "cacheDirectory": ".jest/cache"
+}

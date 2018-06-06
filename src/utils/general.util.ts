@@ -10,14 +10,14 @@ export const deepMerge = <T extends object>(...objects: Partial<T>[]): T => {
           return result[key] = value;
         }
         if (Array.isArray(value) && Array.isArray(existingValue)) {
-          result[key] = existingValue.concat(existingValue);
+          result[key] = existingValue.concat(value);
         } else if (typeof value === 'object' && typeof existingValue === 'object') {
           result[key] = deepMerge(existingValue, value);
         } else {
           result[key] = value;
         }
       } else if (existingValue === undefined) {
-        result[key] = undefined;
+        result[key] = value;
       }
     });
   });

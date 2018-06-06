@@ -1,18 +1,23 @@
-import { undefinedIfFalse } from '../../utils/general';
-import { exec } from '../../utils/promises';
+import { platform } from 'os';
+import { undefinedIfFalse } from '../../utils/general.util';
+import { exec } from '../../utils/promises.util';
+import { Config } from '../config.interface';
 
 export module Circle {
-  export const config = async () => {
+  export const config = async (): Promise<Partial<Config>> => {
+    if (!process.env.CIRCLECI) {
+      return {};
+    }
     const config = {
       git: {
         baseBranch: process.env.CIRCLE_BRANCH,
         repo: process.env.CIRCLE_PROJECT_USERNAME + '/' + process.env.CIRCLE_PROJECT_REPONAME,
-        pull: undefinedIfFalse(process.env.CIRCLE_PR_NUMBER),
+        pull: undefinedIfFalse(process.env.CIRCLE_PULL_REQUEST),
         commit: process.env.CIRCLE_SHA1,
       },
       ci: {
         name: 'Circle',
-        os: process.env.TRAVIS_OS_NAME,
+        os: platform(),
         buildNumber: process.env.CIRCLE_BUILD_NUM,
         jobNumber: process.env.CIRCLE_JOB,
         buildDir: process.env.CIRCLE_WORKING_DIRECTORY,
