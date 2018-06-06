@@ -1,5 +1,5 @@
-import {exec} from '../../utils/promises';
 import { undefinedIfFalse } from '../../utils/general';
+import { exec } from '../../utils/promises';
 
 export module Circle {
   export const config = async () => {
@@ -26,4 +26,5 @@ export module Circle {
       )).stdout;
     }
     return config;
-};
+  };
+}

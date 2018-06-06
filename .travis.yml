@@ -10,7 +10,7 @@ cache:
   yarn: true
 install:
 - yarn
-script:
+script:c
 - yarn lint
 - yarn build
 - yarn start
