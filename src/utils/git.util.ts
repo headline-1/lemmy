@@ -8,6 +8,7 @@ export const git = {
     if (!remote) {
       remote = (await git.remotes())[0];
     }
+    const currentBranch = await git.current();
     const fetchProp = 'remote.origin.fetch';
     const initialFetchValue = await git.config(fetchProp)!;
     const desiredFetchValue = '+refs/heads/*:refs/remotes/origin/*';
@@ -15,6 +16,9 @@ export const git = {
     await exec('git remote update && git fetch', GIT_OPTIONS);
     const stashed = !(await exec('git stash', GIT_OPTIONS)).stdout.match(/No local changes to save/);
     await exec(`git pull ${remote} ${branch}:${branch}`, GIT_OPTIONS);
+    await exec(`git checkout ${branch}`, GIT_OPTIONS);
+    await exec(`git reset --hard ${remote}/${branch}`, GIT_OPTIONS);
+    await exec(`git checkout ${currentBranch}`, GIT_OPTIONS);
     if (stashed) {
       await exec('git stash pop', GIT_OPTIONS);
     }
