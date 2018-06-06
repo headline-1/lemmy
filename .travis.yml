@@ -9,9 +9,10 @@ before_install:
 cache:
   yarn: true
 install:
-- yarn
+- travis_retry yarn install
 script:
 - yarn lint
+- yarn test
 - yarn build
 - yarn start
 branches:

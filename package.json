@@ -1,6 +1,6 @@
 {
   "name": "@h1/lemmy",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Integrate Lemmy, and it will comment your PRs, answering a vital question \"Lemme know what's going on my CI server\"",
   "main": "run.js",
   "repository": "git@github.com:headline-1/lemmy.git",
@@ -8,22 +8,28 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "lint": "mkdir -p reports && tslint './src/**/*.{js,ts}' --project ./ --format json --out './reports/lint.json' || tslint './src/**/*.{js,ts}' --project ./ --format stylish",
+    "build": "tsc && babel build --out-dir dist && yarn gen-docs",
     "gen-docs": "yarn start --actions-doc='./docs/actions.md'",
+    "lint": "mkdir -p reports && tslint './src/**/*.{js,ts}' --project ./ --format json --out './reports/lint.json' || tslint './src/**/*.{js,ts}' --project ./ --format stylish",
     "start": "node dist/index.js",
-    "build": "tsc && babel build --out-dir dist && yarn gen-docs"
+    "test": "jest --config='./jest.config.json' --json --outputFile='./reports/test.json' --testLocationInResults --coverage --detectOpenHandles"
   },
   "bin": {
     "lemmy": "./run.js"
   },
   "devDependencies": {
+    "@types/jest": "^23.0.0",
     "@types/node": "^9.4.0",
     "@types/request": "^2.47.0",
     "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.0.1",
     "babel-preset-env": "^1.7.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.12.0",
+    "jest": "^23.1.0",
+    "ts-jest": "^22.4.6",
     "tslint": "^5.10.0",
     "tslint-config-airbnb-base": "^0.1.0",
     "typescript": "^2.8.3"

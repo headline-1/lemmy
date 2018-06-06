@@ -2,7 +2,7 @@ import { CoreOptions } from 'request';
 import packageJson from '../../package.json';
 import { Action } from '../action.interface';
 import { Context } from '../context';
-import { del, get, post } from '../utils/request';
+import { del, get, post } from '../utils/request.util';
 
 const BASE_URL = 'https://api.github.com/';
 
@@ -102,7 +102,7 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
 
     const {
       git: { repo, pull, commit, baseBranch },
-      ci: { buildNumber, jobNumber, os },
+      ci: { name: ciName, buildNumber, jobNumber, os },
     } = ctx.config;
 
     if (!pull || !repo) {
@@ -118,7 +118,7 @@ Please add environmental variable GITHUB_TOKEN to your CI or a local machine.`);
         ['Comparing against', `\`${baseBranch}\` branch`],
         ['Build number (job)', `${buildNumber} (${jobNumber})`],
         ['Lemmy', packageJson.version],
-        ['System', os],
+        ['System', `${ciName} running ${os}`],
       ])
       .collapsibleSectionEnd();
 

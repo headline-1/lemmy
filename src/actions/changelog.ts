@@ -1,6 +1,6 @@
 import { Action } from '../action.interface';
 import { Context } from '../context';
-import { git } from '../utils/git';
+import { Git } from '../utils/git.util';
 
 interface Params {
   file?: string;
@@ -20,7 +20,7 @@ export const action: Action<Params> = {
   execute: async (ctx: Context, params: Params) => {
     ctx.message.section('Changelog');
 
-    const diff = (await git.diff(ctx, params.file)).trim();
+    const diff = (await Git.diff(ctx, params.file)).trim();
     const removed = diff.match(/^-/gm);
     const added = diff.match(/^\+/gm);
     if (!added || (removed && added.length < removed.length)) {

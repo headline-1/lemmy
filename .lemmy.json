@@ -14,6 +14,16 @@
       "file": "./reports/lint.json"
     },
     {
+      "name": "jest",
+      "header": "Tests",
+      "file": "./reports/test.json"
+    },
+    {
+      "name": "coverage",
+      "file": "./reports/coverage/coverage-final.json",
+      "errorThreshold": 0
+    },
+    {
       "name": "githubComment",
       "oneCommentPerCommit": true,
       "removalPolicy": "always"

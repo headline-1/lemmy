@@ -1,5 +1,5 @@
-import { Config } from './config';
-import { Message } from './utils/message';
+import { Config } from './config/config.interface';
+import { Message } from './utils/message.util';
 
 export interface Context {
   message: Message;

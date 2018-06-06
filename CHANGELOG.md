@@ -1,3 +1,7 @@
+# 0.3.1
+
+* CircleCI support - now you can also use Lemmy on both Travis and CircleCI!
+
 # 0.3.0
 
 * Lemmy moved to @headline-1 organization

@@ -9,7 +9,7 @@ There were no free, open-source solutions (besides [Danger.js](https://github.co
 ### Features
 
 * Github PR comment support
-* Travis environment support
+* Travis and CircleCI environment support
 * Standard set of actions which compile into a report
 * Humble emoji set to decorate messages (this one should be #1 feature)
 
@@ -28,17 +28,33 @@ Then add `.lemmy.json` configuration file and define some actions inside:
 ```json
 {
   "actions": [
-    "packageVersion",
-    "changelog",
+    {
+      "name": "packageVersion",
+      "file": "package.json"
+    },
+    {
+      "name": "changelog",
+      "file": "CHANGELOG.md"
+    },
     {
       "name": "lint",
-      "file": "reports/lint.json"
+      "file": "./reports/lint.json"
     },
     {
       "name": "jest",
-      "file": "reports/test.json"
+      "file": "./reports/test.json"
     },
-    "stdout"
+    {
+      "name": "coverage",
+      "file": "./reports/coverage/coverage-final.json",
+      "warnThreshold": 90,
+      "errorThreshold": 70
+    },
+    {
+      "name": "githubComment",
+      "oneCommentPerCommit": true,
+      "removalPolicy": "always"
+    }
   ]
 }
 ```
@@ -65,15 +81,15 @@ If you have included `stdout` action, you should see a Markdown output that is e
 
 ##### GitHub
 
-To configure GitHub integration and obtain the token, follow the instructions in [docs](./docs/github.md).
+To configure GitHub integration and obtain the token, follow the instructions in [docs](./github.md).
 
 ##### Travis
 You should be ready to add the above command as a step in `.travis.yml` in script section, after running linter/tests.
 
 ## Actions
 
-For complete list of actions, see [Action Docs](./docs/actions.md).
+For complete list of actions, see [Action Docs](./actions.md).
 
 ## Changelog
 
-See [Changelog](./CHANGELOG.md).
+See [Changelog](../CHANGELOG.md).

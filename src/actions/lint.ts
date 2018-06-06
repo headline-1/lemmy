@@ -1,7 +1,7 @@
 import { Action } from '../action.interface';
 import { Context } from '../context';
-import { asCode, asCollapsedPath } from '../utils/message';
-import { readFile } from '../utils/promises';
+import { asCode, asCollapsedPath } from '../utils/message.util';
+import { readFile } from '../utils/promises.util';
 
 interface Params {
   header: string;
