@@ -15,7 +15,7 @@ export module Circle {
       // See: https://discuss.circleci.com/t/how-to-get-the-pull-request-upstream-branch/5496
       return (await exec(
         `curl -fsSL https://api.github.com/repos/${repo}/pulls/${pull} | jq -r '.base.ref'`
-      )).stdout;
+      )).stdout.trim();
     }
     return undefined;
   };
