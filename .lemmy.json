@@ -20,7 +20,8 @@
     },
     {
       "name": "coverage",
-      "file": "./reports/coverage/coverage-final.json"
+      "file": "./reports/coverage/coverage-final.json",
+      "errorThreshold": 0
     },
     {
       "name": "githubComment",
