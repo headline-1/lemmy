@@ -1,4 +1,4 @@
-# 0.3.1
+# 0.3.2
 
 * CircleCI support - now you can also use Lemmy on both Travis and CircleCI!
 
