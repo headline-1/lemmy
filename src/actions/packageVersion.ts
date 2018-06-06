@@ -1,6 +1,6 @@
 import { Action } from '../action.interface';
 import { Context } from '../context';
-import { git } from '../utils/git.util';
+import { Git } from '../utils/git.util';
 
 interface Params {
   file: string;
@@ -13,7 +13,7 @@ export const action: Action<Params> = {
     { name: 'file', type: 'string', description: 'path to a lint report file in repository', default: 'package.json' },
   ],
   execute: async (ctx: Context, params: Params) => {
-    const diff = (await git.diff(ctx, params.file)).trim();
+    const diff = (await Git.diff(ctx, params.file)).trim();
     const versionChange = diff.match(/^[-+]\s+("version"\s*:\s*"\d+\.\d+\.\d+")/gm);
     ctx.message.section('Version');
     if (!versionChange) {

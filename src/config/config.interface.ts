@@ -9,6 +9,7 @@ export interface Config {
   args: Args;
   git: {
     baseBranch?: string;
+    isBaseBranchSynchronized?: boolean;
     repo?: string;
     pull?: string;
     commit?: string;
