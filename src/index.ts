@@ -43,6 +43,7 @@ const run = async () => {
       throw new Error(`Can not find an action "${actionEntry.name}"`);
     }
     console.log(` ➡ ${action.name}`);
+    console.time(action.name);
     try {
       await executeAction(action, context, actionEntry);
     } catch (err) {
@@ -50,6 +51,7 @@ const run = async () => {
       console.log(` ✖ ${err.message}`);
       message.error(err.message);
     }
+    console.timeEnd(action.name);
   }
   if (errorsOccurred) {
     process.exit(1);

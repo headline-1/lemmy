@@ -102,7 +102,7 @@ const formatStatLine = (getThresholdSign: (stat: CoverageStat) => string) =>
     getThresholdSign(line[property]),
   ]);
 
-export const action: Action<Params> = {
+export const coverage: Action<Params> = {
   name: 'coverage',
   description: 'Prepares a report from Coverage JSON output.',
   args: [

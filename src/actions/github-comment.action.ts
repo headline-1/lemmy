@@ -70,7 +70,7 @@ const removeComments = async (ctx: Context, myComments: GithubComment[], removal
   }
 };
 
-export const action: Action<Params> = {
+export const githubComment: Action<Params> = {
   name: 'githubComment',
   description: 'Sends a Markdown-formatted message as a GitHub Pull Request comment. ' +
   'PR number and repository name are inferred from CI\'s env vars,' +

@@ -6,7 +6,7 @@ interface Params {
   file?: string;
 }
 
-export const action: Action<Params> = {
+export const changelog: Action<Params> = {
   name: 'changelog',
   description: 'Checks if changes were performed in changelog file.',
   args: [

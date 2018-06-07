@@ -25,7 +25,7 @@ interface Failure {
   ruleSeverity: string;
 }
 
-export const action: Action<Params> = {
+export const lint: Action<Params> = {
   name: 'lint',
   description: 'Prepares a report from linter\'s JSON output. Tested with TSLint.',
   args: [

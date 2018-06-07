@@ -6,7 +6,7 @@ interface Params {
   file: string;
 }
 
-export const action: Action<Params> = {
+export const packageVersion: Action<Params> = {
   name: 'packageVersion',
   description: 'Makes sure that version in `package.json` file has been changed',
   args: [

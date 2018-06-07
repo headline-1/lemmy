@@ -1,7 +1,7 @@
 import { Action } from '../action.interface';
 import { Context } from '../context';
 
-export const action: Action<{}> = {
+export const stdout: Action<{}> = {
   name: 'stdout',
   description: 'Writes the Markdown-formatted message to a console',
   args: [],

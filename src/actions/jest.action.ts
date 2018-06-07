@@ -61,7 +61,7 @@ interface TestResults {
   wasInterrupted: boolean;
 }
 
-export const action: Action<Params> = {
+export const jest: Action<Params> = {
   name: 'jest',
   description: 'Prepares a report from Jest\'s JSON output.',
   args: [

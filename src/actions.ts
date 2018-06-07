@@ -1,39 +1,31 @@
-import * as path from 'path';
 import { Action } from './action.interface';
+import { Actions } from './actions/all.actions';
 import { Context } from './context';
-import { readdir, writeFile } from './utils/promises.util';
+import { writeFile } from './utils/promises.util';
 
 const missingPropertyError = (path: string, property: string): Error =>
-  new Error(`An action at "${path} is missing a "${property} property.`);
+  new Error(`An action "${path}" is missing a "${property}" property.`);
 
-export const getActions = async (): Promise<Action<any>[]> => {
-  const actionsDirectory = path.resolve(__dirname, './actions');
-  const paths = (await readdir(actionsDirectory))
-    .filter(file => file.endsWith('.js'))
-    .map(file => path.resolve(path.resolve(__dirname, './actions'), file));
-
-  return paths.map((path: string) => {
-    const module = require(path);
-    const action: Action<any> = module.action;
+export const getActions = async (): Promise<Action<any>[]> => Object.entries(Actions)
+  .map(([name, action]: [string, Action<any>]) => {
     if (!action) {
-      throw new Error(`An action at "${path}" does not have a valid entry point (missing "action" export).`);
+      throw new Error(`An action "${name}" does not have a valid entry point (missing "action" export).`);
     }
     if (!action.name) {
-      throw missingPropertyError(path, 'name');
+      throw missingPropertyError(name, 'name');
     }
     if (!action.description) {
-      throw missingPropertyError(path, 'description');
+      throw missingPropertyError(name, 'description');
     }
     if (!action.args) {
-      throw missingPropertyError(path, 'args');
+      throw missingPropertyError(name, 'args');
     }
     if (!action.execute) {
-      throw missingPropertyError(path, 'execute');
+      throw missingPropertyError(name, 'execute');
     }
 
     return action;
   });
-};
 
 export const executeAction = async <Params>(
   action: Action<Params>, context: Context, params: Params
